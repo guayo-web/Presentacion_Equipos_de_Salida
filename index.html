@@ -140,8 +140,9 @@
     async function refreshFromHandle() { if (selectedHandles.length) await loadFiles(await Promise.all(selectedHandles.map(handle=>handle.getFile()))); }
     function setAutoSync(enabled) {
       clearInterval(syncTimer); syncTimer=null;
-      const button=document.querySelector('#openFileButton'); button.classList.toggle('is-live',enabled && selectedHandles.length > 0);
-      if (enabled && selectedHandles.length > 0) { syncTimer=setInterval(refreshFromHandle,15000); document.querySelector('#sourceStatus').textContent='Sincronización activa · revisión cada 15 s'; }
+      const canRefresh=selectedHandles.length > 0 || selectedFiles.length > 0;
+      const button=document.querySelector('#openFileButton'); button.classList.toggle('is-live',enabled && canRefresh);
+      if (enabled && canRefresh) { syncTimer=setInterval(() => selectedHandles.length ? refreshFromHandle() : loadFiles(selectedFiles),15000); document.querySelector('#sourceStatus').textContent='Sincronización activa · revisión cada 15 s'; }
     }
     document.querySelector('#openFileButton').addEventListener('click', chooseWorkbook);
     document.querySelector('#shareButton').addEventListener('click', async () => { const shareData={title:'Dashboard de Seguridad Patrimonial',text:'Dashboard de salidas y regresos de equipos - Laboratorios Sophia',url:window.location.href}; try { if (navigator.share) await navigator.share(shareData); else await navigator.clipboard.writeText(window.location.href); document.querySelector('#sourceStatus').textContent=navigator.share?'Enlace listo para compartir':'Enlace copiado al portapapeles'; } catch(error) { if(error.name!=='AbortError') document.querySelector('#sourceStatus').textContent='Publica el HTML en una URL para compartirlo entre dispositivos'; } });
