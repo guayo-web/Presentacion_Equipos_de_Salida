@@ -157,6 +157,8 @@
     document.querySelector('#monthFilter').addEventListener('change', event => { activeMonth=event.target.value; applyFilters(); });
     document.querySelector('#personSearchButton').addEventListener('click', () => { activePerson=document.querySelector('#personFilter').value.trim(); updatePersonTitle(); applyFilters(); });
     document.querySelector('#personFilter').addEventListener('input', event => { activePerson=event.target.value.trim(); populatePersonSuggestions(); updatePersonTitle(); applyFilters(); });
+    document.querySelector('#personFilter').addEventListener('keyup', event => { if (event.key !== 'Enter') { activePerson=event.target.value.trim(); populatePersonSuggestions(); updatePersonTitle(); applyFilters(); } });
+    document.querySelector('#personFilter').addEventListener('change', event => { activePerson=event.target.value.trim(); populatePersonSuggestions(); updatePersonTitle(); applyFilters(); });
     document.querySelector('#personSuggestions').addEventListener('click', event => { const option=event.target.closest('[data-person]'); if (!option) return; activePerson=option.dataset.person; document.querySelector('#personFilter').value=activePerson; document.querySelector('#personSuggestions').innerHTML=''; updatePersonTitle(); applyFilters(); });
     document.querySelector('#personFilter').addEventListener('keydown', event => { if (event.key === 'Enter') document.querySelector('#personSearchButton').click(); });
     document.querySelector('#autoSync').addEventListener('change', event => setAutoSync(event.target.checked));
